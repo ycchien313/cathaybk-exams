@@ -1,3 +1,5 @@
+import React from "react";
+
 const COLOR_SCHEMA = {
   default: {
     bg: "bg-inherit",
@@ -27,24 +29,20 @@ export const CalendarDay = ({
   date,
   day,
   isCurrentMonth,
+  isStartDate,
   isInRange,
   isToday,
   onSelectDate,
 }) => {
-  const handleSelectDate = (date) => {
-    if (!isCurrentMonth) return;
-    onSelectDate(date);
-  };
-
+  const isInCurrentRange = isInRange || isStartDate;
   return (
     <button
       key={date}
       className={`
         w-[50px] h-[36px]
-        ${getColorClasses(isToday, isInRange)}`
-      }
+        ${getColorClasses(isToday, isInCurrentRange)}`}
       disabled={!isCurrentMonth}
-      onClick={() => handleSelectDate(date)}
+      onClick={() => onSelectDate(date)}
     >
       {day}日
     </button>

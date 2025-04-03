@@ -1,51 +1,48 @@
 <!-- Please write the sample code to debounce handleOnChange (Do not use  any 3th party libs other than react) -->
- 
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body>
-  <div id="root"></div>
-</body>
-<script type="text/babel">
-  function DebouncedInput() {
-    const [inputValue, setInputValue] = React.useState('');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script type="text/babel">
+    function DebouncedInput() {
+      const [inputValue, setInputValue] = React.useState("");
 
-    function debounce(func, delay) {
-      let timeoutId;
-      return (...args) => {
+      function debounce(func, delay) {
+        let timeoutId;
+        return (...args) => {
           clearTimeout(timeoutId);
           timeoutId = setTimeout(() => {
-              func(...args);
+            func(...args);
           }, delay);
+        };
+      }
+
+      const debouncedHandleChange = React.useCallback(
+        debounce((value) => {
+          console.log(value);
+        }, 1000),
+        []
+      );
+
+      const handleOnChange = (event) => {
+        const newValue = event.target.value;
+        setInputValue(newValue);
+        debouncedHandleChange(newValue);
       };
+
+      return <input name="p" value={inputValue} onChange={handleOnChange} />;
     }
 
-    const debouncedHandleChange = React.useCallback(
-      debounce((value) => {
-          console.log(value);
-      }, 1000), []);
-
-    const handleOnChange = (event) => {
-      const newValue = event.target.value;
-      setInputValue(newValue);
-      debouncedHandleChange(newValue);
-    };
-
-    return (
-      <input
-        name="p"
-        value={inputValue}
-        onChange={handleOnChange}
-      />
-    );
-  }
-
-  ReactDOM.render(<DebouncedInput />, document.getElementById('root'));
-</script>
+    ReactDOM.render(<DebouncedInput />, document.getElementById("root"));
+  </script>
+</html>
